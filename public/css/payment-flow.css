@@ -1,0 +1,247 @@
+/* public/css/payment-flow.css */
+
+/* === GLOBAL & LAYOUT === */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* [UBAH] Body sekarang menjadi latar belakang utama */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #ffffff; /* Latar belakang sekarang putih */
+    color: #333;
+    /* Properti flex dan padding untuk centering dihilangkan */
+}
+
+/* [UBAH] Payment Container sekarang menjadi pembungkus konten, bukan kartu */
+.payment-container {
+    width: 100%;
+    max-width: 800px; /* Lebar maksimal konten agar nyaman dibaca */
+    margin: 0 auto; /* Centering konten secara horizontal */
+    padding: 3rem 2rem; /* Memberi jarak atas/bawah dan samping */
+    /* Properti shadow, border-radius, dan background dihilangkan */
+}
+
+/* === TIMELINE / STEP INDICATOR === */
+.timeline {
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    margin-bottom: 2.5rem;
+    position: relative;
+}
+
+.timeline::before { /* Garis penghubung abu-abu */
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #e5e7eb;
+    z-index: 1;
+}
+
+.timeline-step {
+    text-align: center;
+    flex-basis: 33.33%;
+    position: relative;
+    z-index: 2;
+}
+
+.step-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #e5e7eb;
+    color: #9ca3af;
+    border: 2px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.step-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+/* Status Step */
+.timeline-step.active .step-circle {
+    background-color: #ffffff;
+    border-color: #3b82f6; /* Biru */
+    color: #3b82f6;
+}
+
+.timeline-step.active .step-label {
+    color: #3b82f6;
+    font-weight: 600;
+}
+
+.timeline-step.completed .step-circle {
+    background-color: #10b981; /* Hijau */
+    border-color: #10b981;
+    color: #ffffff;
+}
+
+.timeline-step.completed::after { /* Garis penghubung berwarna */
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: -50%;
+    width: 100%;
+    height: 2px;
+    background-color: #10b981;
+    z-index: -1;
+}
+
+.timeline-step:first-child.completed::after {
+    width: 50%;
+    left: 50%;
+}
+
+/* === FORM & CONTENT STYLES === */
+.content-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.content-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+    color: #111827;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #374151;
+}
+
+.form-group input[type="date"],
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.form-group input[type="file"] {
+    padding: 0.5rem;
+}
+
+/* === SUMMARY & PAYMENT INFO === */
+.summary-box {
+    background-color: #f9fafb;
+    border: 1px solid #f3f4f6;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+}
+
+.summary-total {
+    font-weight: 700;
+    font-size: 1.125rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.payment-info-box {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    background-color: #f9fafb;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.payment-info-box p {
+    line-height: 1.5;
+}
+
+/* === BUTTONS === */
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: #3b82f6;
+    color: white;
+}
+.btn-primary:hover {
+    background-color: #2563eb;
+}
+
+.btn-secondary {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+.btn-secondary:hover {
+    background-color: #d1d5db;
+}
+
+/* === CENTERED CONTENT FOR SUCCESS/PENDING === */
+.centered-content {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.centered-content .icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #d1fae5;
+    color: #059669;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin: 0 auto 1.5rem;
+}
+
+.centered-content h2 {
+    font-size: 1.75rem;
+    color: #111827;
+    margin-bottom: 0.75rem;
+}
+
+.centered-content p {
+    color: #4b5563;
+    max-width: 450px;
+    margin: 0 auto 1.5rem;
+}

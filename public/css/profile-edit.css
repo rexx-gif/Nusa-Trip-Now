@@ -1,0 +1,142 @@
+/* public/css/profile-edit.css */
+
+/* === GLOBAL & LAYOUT === */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f3f4f6; /* bg-gray-100 */
+    color: #374151; /* text-gray-700 */
+}
+
+.page-container {
+    padding: 3rem 0; /* py-12 */
+}
+
+.container {
+    max-width: 1100px; /* max-w-7xl */
+    margin: 0 auto;
+    padding: 0 1.5rem; /* sm:px-6 lg:px-8 */
+}
+
+.page-header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 1.5rem;
+}
+
+.sections-wrapper {
+    display: grid;
+    gap: 1.5rem; /* space-y-6 */
+}
+
+/* === SECTION CARD === */
+.profile-section {
+    background-color: #ffffff;
+    padding: 1.5rem 2rem; /* p-4 sm:p-8 */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow */
+    border-radius: 0.5rem; /* sm:rounded-lg */
+}
+
+.section-header {
+    margin-bottom: 1.5rem;
+    max-width: 42rem; /* max-w-xl */
+}
+
+.section-title {
+    font-size: 1.125rem; /* text-lg */
+    font-weight: 500;
+    color: #111827; /* text-gray-900 */
+}
+
+.section-description {
+    margin-top: 0.25rem;
+    font-size: 0.875rem; /* text-sm */
+    color: #6b7280; /* text-gray-600 */
+}
+
+/* === FORM STYLES === */
+.form-group {
+    margin-bottom: 1rem;
+    max-width: 42rem; /* max-w-xl */
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input {
+    display: block;
+    width: 100%;
+    border: 1px solid #d1d5db; /* border-gray-300 */
+    border-radius: 0.375rem; /* rounded-md */
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #4f46e5; /* focus:border-indigo-500 */
+    box-shadow: 0 0 0 1px #4f46e5; /* focus:ring-indigo-500 */
+}
+
+.form-error {
+    color: #dc2626; /* text-red-600 */
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    max-width: 42rem; /* max-w-xl */
+}
+
+.form-saved-message {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+/* === BUTTONS === */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-primary {
+    background-color: #1f2937; /* bg-gray-800 */
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: #374151; /* hover:bg-gray-700 */
+}
+
+.btn-danger {
+    background-color: #dc2626; /* bg-red-600 */
+    color: #ffffff;
+}
+
+.btn-danger:hover {
+    background-color: #b91c1c; /* hover:bg-red-700 */
+}
