@@ -23,38 +23,26 @@ class BookingController extends Controller
      */
     public function store(Request $request, Tour $tour)
     {
+        // 1. Validasi input dari form
         $request->validate([
             'booking_date' => 'required|date|after_or_equal:today',
-            'quantity' => 'required|integer|min:1|max:10', // Validasi jumlah tiket
+            'quantity' => 'required|integer|min:1|max:10',
         ]);
 
-        // ===================================================================
-        // PROSES PEMBAYARAN SIMULASI
-        // ===================================================================
-        // Tidak ada koneksi ke payment gateway.
-        // Booking langsung dianggap berhasil dan statusnya diubah menjadi 'paid'.
-        
-        $booking = Booking::create([
-            'user_id' => Auth::id(),
-            'tour_id' => $tour->id,
-            'booking_date' => $request->booking_date,
-            'quantity' => $request->quantity, // Simpan jumlah tiket
-            'total_price' => $request->quantity * $tour->price, // Simpan total harga baru
-            'status' => 'paid', // Langsung set status menjadi 'paid'
-        ]);
-        // Hitung total harga baru
+        // 2. Hitung total harga berdasarkan kuantitas
         $totalPrice = $tour->price * $request->quantity;
 
+        // 3. Buat SATU data booking baru dengan status menunggu pembayaran
         $booking = Booking::create([
             'user_id' => Auth::id(),
             'tour_id' => $tour->id,
             'booking_date' => $request->booking_date,
-            'quantity' => $request->quantity, // Simpan jumlah tiket
-            'total_price' => $totalPrice, // Simpan total harga baru
-            'status' => 'waiting_payment', // KEMBALIKAN STATUS MENJADI MENUNGGU PEMBAYARAN
+            'quantity' => $request->quantity,
+            'total_price' => $totalPrice,
+            'status' => 'waiting_payment', // Status yang benar untuk alur pembayaran
         ]);
 
-        // ALIHKAN PENGGUNA KE HALAMAN PEMBAYARAN
+        // 4. Alihkan pengguna ke halaman pembayaran dengan data booking yang baru dibuat
         return redirect()->route('payment.show', $booking);
     }
-};
+}

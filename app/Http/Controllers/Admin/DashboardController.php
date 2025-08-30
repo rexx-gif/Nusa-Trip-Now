@@ -1,43 +1,30 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin; // Sesuaikan namespace Anda
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail; // <-- Tambahkan ini
-use App\Mail\BookingConfirmed;      // <-- Tambahkan ini
+use App\Models\User; // <-- Import User
+use Illuminate\Support\Facades\DB; // <-- Import DB
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $totalSales = Booking::where('status', 'paid')->orWhere('status', 'completed')->sum('total_price');
-        $allBookings = Booking::with(['user', 'tour'])->latest()->paginate(15);
-        $pendingConfirmations = Booking::where('status', 'pending_confirmation')->with(['user', 'tour'])->get();
+        // Data yang sudah ada
+        $totalSales = Booking::whereIn('status', ['paid', 'completed'])->sum('total_price');
+        $pendingConfirmations = Booking::with('user', 'tour')->where('status', 'pending_confirmation')->get();
+        $allBookings = Booking::with('user', 'tour')->latest()->paginate(10);
 
-        return view('admin.dashboard', compact('totalSales', 'allBookings', 'pendingConfirmations'));
-    }
+        // DATA BARU: Ambil daftar user yang memiliki percakapan
+        $chatUserIds = DB::table('chat_messages')->distinct()->pluck('user_id');
+        $chatUsers = User::whereIn('id', $chatUserIds)->get();
 
-    public function approvePayment(Booking $booking)
-    {
-        // Ubah status booking menjadi 'paid'
-        $booking->update(['status' => 'paid']);
-
-        // Kirim email notifikasi ke user
-        Mail::to($booking->user->email)->send(new BookingConfirmed($booking));
-
-        return redirect()->route('admin.dashboard')->with('success', 'Pembayaran telah berhasil dikonfirmasi dan email notifikasi telah dikirim.');
-    }
-
-    // METHOD BARU UNTUK REJECT
-    public function rejectPayment(Booking $booking)
-    {
-        // Ubah status booking menjadi 'cancelled'
-        $booking->update(['status' => 'cancelled']);
-
-        // Di sini Anda juga bisa mengirim email notifikasi penolakan jika diperlukan
-
-        return redirect()->route('admin.dashboard')->with('success', 'Pembayaran telah ditolak.');
+        return view('admin.dashboard', compact(
+            'totalSales',
+            'pendingConfirmations',
+            'allBookings',
+            'chatUsers' // <-- Kirim data user chat ke view
+        ));
     }
 }

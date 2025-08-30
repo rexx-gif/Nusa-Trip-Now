@@ -10,6 +10,15 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
+      <a href="#hero-section" id="back-to-top-btn" title="Go to top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+      @include('partials.chat-widget')
+     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    @auth
+        <meta name="user-id" content="{{ Auth::id() }}">
+    @endauth
      @if (session('alert'))
         <div id="alert-message" class="fixed top-5 right-5 bg-green-500 text-white py-3 px-5 rounded-lg shadow-lg z-50 animate-fade-in-down">
             {{ session('alert') }}
@@ -22,7 +31,23 @@
     @endif
     <section id="hero-section">
         <img src="assets/img-1.jpg" alt="Japan Alps" class="hero-bg">
-        
+    
+          <div class="parallax-element plane" data-parallax="0.3">
+            <img src="assets/plane.png" alt="Plane">
+        </div>
+        <div class="parallax-element ship" data-parallax="0.2">
+            <img src="assets/ship.png" alt="Ship">
+        </div>
+        <div class="parallax-element hot-air-balloon" data-parallax="0.4">
+            <img src="assets/hot-air-balloon.png" alt="Hot Air Balloon">
+        </div>
+        <div class="parallax-element mountains" data-parallax="0.1">
+            <img src="assets/mountains.png" alt="Mountains">
+        </div>
+        <div class="parallax-element birds" data-parallax="0.5">
+            <img src="assets/birds.png" alt="Birds">
+        </div>
+
         <div class="navbar">
             <div class="left-text">
                 <h1>NusaTripNow</h1>
@@ -117,38 +142,403 @@
         </div>
     </section>
 
-    <!-- Popular Destinations Section -->
-    <section id="popular-destinations">
-        <h2 class="section-title" data-aos="fade-up">Popular Destinations</h2>
-        <div class="destinations-container">
-        <div class="destination-card">
-            <img src="https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1172&q=80" alt="Bali">
-            <div class="destination-info">
-                <h3>Bali, Indonesia</h3>
-                <p>Island of Gods</p>
+        <section id="about-us">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text" data-aos="fade-right">
+                    <h2 class="section-title">About NusaTripNow</h2>
+                    <p class="about-subtitle">Your Trusted Travel Companion Since 2015</p>
+                    <div class="about-description">
+                        <p>NusaTripNow was born from a passion to showcase the breathtaking beauty of the Indonesian archipelago to the world. With over 8 years of experience, we've helped thousands of travelers discover hidden gems and create unforgettable memories.</p>
+                        <p>Our team of local experts carefully curates each itinerary to ensure authentic experiences that respect local cultures and environments.</p>
+                    </div>
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <h3>50,000+</h3>
+                            <p>Happy Travelers</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>150+</h3>
+                            <p>Destinations</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>98%</h3>
+                            <p>Satisfaction Rate</p>
+                        </div>
+                    </div>
+                    <button class="cta-button">Learn More About Us</button>
+                </div>
+                <div class="about-image" data-aos="fade-left">
+                    <img src="https://images.unsplash.com/photo-1530789257038-e9e2b317c037?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Our Team">
+                    <div class="experience-badge">
+                        <span>8+ Years</span>
+                        <small>Of Excellence</small>
+                    </div>
+                </div>
             </div>
-            <a href="{{ route('tours.index') }}" class="book-btn">Book Now</a>
         </div>
-        
-        <div class="destination-card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgSw1kbboZth700TNmk5MKObpUUPvP9rd6MQ&s" alt="Jakarta">
-            <div class="destination-info">
-                <h3>Jakarta</h3>
-                <p>Capital City Adventure</p>
-            </div>
-            <a href="{{ route('tours.index') }}" class="book-btn">Book Now</a>
-        </div>
-        
-        <div class="destination-card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8HbG8HfuiJS_zRqo1BvKyoai1VGOU60ky_g&s" alt="Yogyakarta">
-            <div class="destination-info">
-                <h3>Yogyakarta</h3>
-                <p>Cultural Heart of Java</p>
-            </div>
-            <a href="{{ route('tours.index') }}" class="book-btn">Book Now</a>
-        </div>
-    </div>
     </section>
+
+    <!-- ==================== HOW IT WORKS SECTION ==================== -->
+    <section id="how-it-works">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">How It Works</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Plan Your Dream Vacation in 4 Easy Steps</p>
+            
+            <div class="process-steps">
+                <div class="step" data-aos="fade-up" data-aos-delay="200">
+                    <div class="step-icon">
+                        <i class="fas fa-search"></i>
+                        <div class="step-number">1</div>
+                    </div>
+                    <h3>Explore Destinations</h3>
+                    <p>Browse through our curated collection of amazing destinations and find your perfect getaway.</p>
+                </div>
+                
+                <div class="step" data-aos="fade-up" data-aos-delay="300">
+                    <div class="step-icon">
+                        <i class="fas fa-calendar-check"></i>
+                        <div class="step-number">2</div>
+                    </div>
+                    <h3>Book & Customize</h3>
+                    <p>Select your preferred dates and customize your itinerary with our travel experts.</p>
+                </div>
+                
+                <div class="step" data-aos="fade-up" data-aos-delay="400">
+                    <div class="step-icon">
+                        <i class="fas fa-credit-card"></i>
+                        <div class="step-number">3</div>
+                    </div>
+                    <h3>Secure Payment</h3>
+                    <p>Complete your booking with our secure payment system and get instant confirmation.</p>
+                </div>
+                
+                <div class="step" data-aos="fade-up" data-aos-delay="500">
+                    <div class="step-icon">
+                        <i class="fas fa-plane-departure"></i>
+                        <div class="step-number">4</div>
+                    </div>
+                    <h3>Travel & Enjoy</h3>
+                    <p>Embark on your journey and create unforgettable memories with our support 24/7.</p>
+                </div>
+            </div>
+            
+            <div class="process-connector"></div>
+        </div>
+    </section>
+
+    <!-- ==================== SPECIAL OFFERS SECTION ==================== -->
+    <section id="special-offers">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Special Offers</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Limited Time Deals You Don't Want to Miss</p>
+            
+            <div class="offers-grid">
+                <div class="offer-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="offer-badge">30% OFF</div>
+                    <img src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Bali Package">
+                    <div class="offer-content">
+                        <h3>Bali Paradise Package</h3>
+                        <p class="offer-desc">5 Days 4 Nights - All Inclusive</p>
+                        <div class="offer-price">
+                            <span class="old-price">$899</span>
+                            <span class="new-price">$629</span>
+                        </div>
+                        <div class="offer-details">
+                            <p><i class="fas fa-hotel"></i> 4-Star Accommodation</p>
+                            <p><i class="fas fa-utensils"></i> Breakfast Included</p>
+                            <p><i class="fas fa-ticket-alt"></i> Tour Activities</p>
+                        </div>
+                        <button class="offer-cta">Book Now</button>
+                    </div>
+                    <div class="time-left">
+                        <i class="fas fa-clock"></i>
+                        <span>5 days left</span>
+                    </div>
+                </div>
+                
+                <div class="offer-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="offer-badge">EARLY BIRD</div>
+                    <img src="https://images.unsplash.com/photo-1580548254596-1efd3777f5ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Lombok Package">
+                    <div class="offer-content">
+                        <h3>Lombok Adventure</h3>
+                        <p class="offer-desc">4 Days 3 Nights - Group Tour</p>
+                        <div class="offer-price">
+                            <span class="old-price">$650</span>
+                            <span class="new-price">$520</span>
+                        </div>
+                        <div class="offer-details">
+                            <p><i class="fas fa-hotel"></i> Beachfront Villa</p>
+                            <p><i class="fas fa-ship"></i> Island Hopping</p>
+                            <p><i class="fas fa-hiking"></i> Rinjani Trekking</p>
+                        </div>
+                        <button class="offer-cta">Book Now</button>
+                    </div>
+                    <div class="time-left">
+                        <i class="fas fa-clock"></i>
+                        <span>7 days left</span>
+                    </div>
+                </div>
+                
+                <div class="offer-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="offer-badge">FLASH SALE</div>
+                    <img src="https://images.unsplash.com/photo-1564574660022-53a0ad63f0ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Java Culture">
+                    <div class="offer-content">
+                        <h3>Java Cultural Journey</h3>
+                        <p class="offer-desc">6 Days 5 Nights - Cultural Immersion</p>
+                        <div class="offer-price">
+                            <span class="old-price">$780</span>
+                            <span class="new-price">$624</span>
+                        </div>
+                        <div class="offer-details">
+                            <p><i class="fas fa-hotel"></i> Heritage Stays</p>
+                            <p><i class="fas fa-theater-masks"></i> Cultural Shows</p>
+                            <p><i class="fas fa-monument"></i> Temple Tours</p>
+                        </div>
+                        <button class="offer-cta">Book Now</button>
+                    </div>
+                    <div class="time-left">
+                        <i class="fas fa-clock"></i>
+                        <span>2 days left</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== TRAVEL GUIDES SECTION ==================== -->
+    <section id="travel-guides">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Travel Guides & Tips</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Expert Advice for Your Next Adventure</p>
+            
+            <div class="guides-grid">
+                <article class="guide-card" data-aos="fade-up" data-aos-delay="200">
+                    <img src="https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Bali Guide">
+                    <div class="guide-content">
+                        <div class="guide-meta">
+                            <span class="guide-category">Destination Guide</span>
+                            <span class="guide-date"><i class="far fa-clock"></i> 5 min read</span>
+                        </div>
+                        <h3>Ultimate Bali Travel Guide 2024</h3>
+                        <p>Discover the best places to visit, eat, and stay in the Island of Gods. From hidden beaches to cultural landmarks.</p>
+                        <a href="#" class="guide-link">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                
+                <article class="guide-card" data-aos="fade-up" data-aos-delay="300">
+                    <img src="https://images.unsplash.com/photo-1580548254596-1efd3777f5ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Packing Tips">
+                    <div class="guide-content">
+                        <div class="guide-meta">
+                            <span class="guide-category">Travel Tips</span>
+                            <span class="guide-date"><i class="far fa-clock"></i> 3 min read</span>
+                        </div>
+                        <h3>10 Essential Packing Tips for Tropical Climates</h3>
+                        <p>Learn how to pack smart for your tropical vacation. What to bring and what to leave behind.</p>
+                        <a href="#" class="guide-link">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                
+                <article class="guide-card" data-aos="fade-up" data-aos-delay="400">
+                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Photography">
+                    <div class="guide-content">
+                        <div class="guide-meta">
+                            <span class="guide-category">Photography</span>
+                            <span class="guide-date"><i class="far fa-clock"></i> 7 min read</span>
+                        </div>
+                        <h3>How to Take Stunning Travel Photos</h3>
+                        <p>Professional tips and tricks to capture amazing travel memories with any camera.</p>
+                        <a href="#" class="guide-link">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+            </div>
+            
+            <div class="guides-cta" data-aos="fade-up" data-aos-delay="500">
+                <a href="#" class="view-all-guides">View All Guides <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== GALLERY SECTION ==================== -->
+    <section id="gallery">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Travel Gallery</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Moments Captured by Our Travelers</p>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
+                    <img src="https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Gallery 1">
+                    <div class="gallery-overlay">
+                        <div class="gallery-info">
+                            <h4>Bali Sunset</h4>
+                            <p>By: Sarah J.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-aos="zoom-in" data-aos-delay="250">
+                    <img src="https://images.unsplash.com/photo-1580548254596-1efd3777f5ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Gallery 2">
+                    <div class="gallery-overlay">
+                        <div class="gallery-info">
+                            <h4>Lombok Beaches</h4>
+                            <p>By: Mike T.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-aos="zoom-in" data-aos-delay="300">
+                    <img src="https://images.unsplash.com/photo-1564574660022-53a0ad63f0ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Gallery 3">
+                    <div class="gallery-overlay">
+                        <div class="gallery-info">
+                            <h4>Borobudur Temple</h4>
+                            <p>By: Anna L.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-aos="zoom-in" data-aos-delay="350">
+                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Gallery 4">
+                    <div class="gallery-overlay">
+                        <div class="gallery-info">
+                            <h4>Komodo Island</h4>
+                            <p>By: David K.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-aos="zoom-in" data-aos-delay="400">
+                    <img src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Gallery 5">
+                    <div class="gallery-overlay">
+                        <div class="gallery-info">
+                            <h4>Ubud Rice Terraces</h4>
+                            <p>By: Maria S.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-aos="zoom-in" data-aos-delay="450">
+                    <img src="https://images.unsplash.com/photo-1530789257038-e9e2b317c037?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Gallery 6">
+                    <div class="gallery-overlay">
+                        <div class="gallery-info">
+                            <h4>Raja Ampat Diving</h4>
+                            <p>By: John D.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-cta" data-aos="fade-up" data-aos-delay="500">
+                <p>Share your travel moments with us!</p>
+                <a href="#" class="share-photos-btn">Share Your Photos</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== STATISTICS SECTION ==================== -->
+    <section id="statistics">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat" data-aos="fade-up" data-aos-delay="200">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 data-count="50000">0</h3>
+                    <p>Happy Travelers</p>
+                </div>
+                
+                <div class="stat" data-aos="fade-up" data-aos-delay="300">
+                    <div class="stat-icon">
+                        <i class="fas fa-globe-asia"></i>
+                    </div>
+                    <h3 data-count="150">0</h3>
+                    <p>Destinations</p>
+                </div>
+                
+                <div class="stat" data-aos="fade-up" data-aos-delay="400">
+                    <div class="stat-icon">
+                        <i class="fas fa-plane"></i>
+                    </div>
+                    <h3 data-count="1000">0</h3>
+                    <p>Tours Completed</p>
+                </div>
+                
+                <div class="stat" data-aos="fade-up" data-aos-delay="500">
+                    <div class="stat-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h3 data-count="12">0</h3>
+                    <p>Awards Won</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FAQ SECTION ==================== -->
+    <section id="faq">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Frequently Asked Questions</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Find answers to common questions about our services</p>
+            
+            <div class="faq-container">
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="200">
+                    <button class="faq-question">
+                        How far in advance should I book my trip?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We recommend booking at least 2-3 months in advance for international trips and 1-2 months for domestic travel. For peak seasons (June-August and December), we suggest booking 4-6 months ahead to secure the best accommodations and flights.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="250">
+                    <button class="faq-question">
+                        What is included in the tour package price?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Our tour packages typically include accommodation, transportation during the tour, guided activities, and some meals as specified. Flights, travel insurance, personal expenses, and optional activities are usually not included. Each package has a detailed inclusion list.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="300">
+                    <button class="faq-question">
+                        Do you offer customized itineraries?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes! We specialize in creating personalized itineraries based on your preferences, budget, and travel style. Contact our travel consultants, and we'll craft the perfect journey just for you.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="350">
+                    <button class="faq-question">
+                        What is your cancellation policy?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Our cancellation policy varies depending on the package and timing. Generally, cancellations made 30+ days before departure receive a full refund minus a processing fee. For details, please refer to our Terms & Conditions or contact our support team.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="400">
+                    <button class="faq-question">
+                        Do you provide travel insurance?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>While we strongly recommend travel insurance, it is not automatically included in our packages. We can help you arrange comprehensive travel insurance through our trusted partners to ensure you're covered during your journey.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="faq-cta" data-aos="fade-up" data-aos-delay="500">
+                <p>Still have questions? We're here to help!</p>
+                <a href="#" class="contact-support-btn">Contact Support</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Destinations Section -->
 
     <!-- Testimonials Section -->
     <section id="testimonials">
@@ -262,6 +652,26 @@
                     }
                 });
             });
+
+            const backToTopBtn = document.getElementById('back-to-top-btn');
+
+    // Tampilkan/sembunyikan tombol berdasarkan posisi scroll
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 400) { // Muncul setelah scroll 400px
+            backToTopBtn.classList.add('visible');
+        } else {
+            backToTopBtn.classList.remove('visible');
+        }
+    });
+
+    // Efek smooth scroll saat tombol diklik
+    backToTopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
             
             // Newsletter form submission
             const newsletterForm = document.querySelector('.newsletter-form');
@@ -272,6 +682,67 @@
                     alert(`Thank you for subscribing with: ${email}`);
                     this.reset();
                 });
+            }
+        });
+          document.addEventListener('DOMContentLoaded', function() {
+            // FAQ Accordion
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                
+                question.addEventListener('click', () => {
+                    // Close other open items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle current item
+                    item.classList.toggle('active');
+                });
+            });
+            
+            // Animated counter for statistics
+            const statsSection = document.getElementById('statistics');
+            const stats = document.querySelectorAll('.stat h3');
+            let counted = false;
+            
+            function startCounters() {
+                if (counted) return;
+                
+                stats.forEach(stat => {
+                    const target = parseInt(stat.getAttribute('data-count'));
+                    const duration = 2000; // 2 seconds
+                    const increment = target / (duration / 16); // 60fps
+                    let current = 0;
+                    
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            stat.textContent = target.toLocaleString();
+                            clearInterval(timer);
+                        } else {
+                            stat.textContent = Math.floor(current).toLocaleString();
+                        }
+                    }, 16);
+                });
+                
+                counted = true;
+            }
+            
+            // Intersection Observer for counter animation
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        startCounters();
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            if (statsSection) {
+                observer.observe(statsSection);
             }
         });
     </script>

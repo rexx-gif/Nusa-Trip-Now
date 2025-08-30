@@ -29,6 +29,7 @@
                         <p class="user-email">{{ $user->email }}</p>
 
                         <div class="profile-actions">
+                            <a href="{{ route('home') }}" class="btn border-teal-500">Back To Menu</a>
                              <a href="{{ route('profile.edit') }}" class="btn btn-primary">Edit Profil</a>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf

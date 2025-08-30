@@ -37,7 +37,7 @@
                 <a href="{{ route('admin.tours.index') }}" 
                    class="block py-2.5 px-6 rounded transition duration-200 hover:bg-gray-700 {{ request()->routeIs('admin.tours.*') ? 'bg-gray-900' : '' }}">
                    Manajemen Wisata
-                </a>
+            </a>
                 <!-- Link navigasi admin lainnya bisa ditambahkan di sini -->
             </nav>
         </aside>

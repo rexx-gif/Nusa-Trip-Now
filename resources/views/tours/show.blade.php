@@ -4,11 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $tour->name }} - Detail Paket Wisata</title>
-
-    {{-- Menghubungkan ke file CSS untuk halaman detail --}}
     <link rel="stylesheet" href="{{ asset('css/tour-details.css') }}">
-    
-    {{-- (Opsional) Menghubungkan ke font dari Google Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -17,7 +13,6 @@
 
     <main class="page-container">
         <div class="container">
-            {{-- Tombol Kembali (Opsional tapi direkomendasikan untuk UX) --}}
             <div class="back-link-wrapper">
                 <a href="{{ route('tours.index') }}" class="back-link">&larr; Kembali ke semua paket</a>
             </div>
@@ -46,6 +41,7 @@
                             <div class="booking-action">
                                 <a href="{{ route('booking.create', $tour) }}" class="btn-booking">
                                     Booking Sekarang
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L200.69,132H40a8,8,0,0,1,0-16H200.69L138.34,53.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg>
                                 </a>
                             </div>
                         </div>

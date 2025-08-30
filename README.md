@@ -59,3 +59,7 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+Teknologi yang saya gunakan dalam website ini adalah : 
+1.Laravel Echo Pusher JS
+2.Laravel Pusher PHP Server
