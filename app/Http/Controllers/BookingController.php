@@ -24,9 +24,9 @@ class BookingController extends Controller
     public function store(Request $request, Tour $tour)
     {
         // 1. Validasi input dari form
-        $request->validate([
+        $request->valiedate([
             'booking_date' => 'required|date|after_or_equal:today',
-            'quantity' => 'required|integer|min:1|max:10',
+            'quantity' => 'required|intger|min:1|max:10',
         ]);
 
         // 2. Hitung total harga berdasarkan kuantitas
