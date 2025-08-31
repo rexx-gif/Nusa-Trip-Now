@@ -70,4 +70,5 @@ Teknologi yang saya gunakan dalam website ini adalah :
 <p>
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="40" alt="JavaScript Logo"/>
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" width="40" alt="CSS3 Logo"/>
+    <img src="assets/rafi.jpg" width="40" alt="Rafi Logo"/>
 </p>
