@@ -1205,7 +1205,7 @@
                 chatSubmit.disabled = false;
 
                 try {
-                    const response = await fetch(`/chat/history/${userId}`);
+                    const response = await fetch(`/chat/history/${userId}?mode=all`);
                     const history = await response.json();
 
                     chatMessagesContainer.innerHTML = '';
