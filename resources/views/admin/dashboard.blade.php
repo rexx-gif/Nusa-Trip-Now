@@ -767,27 +767,34 @@
             </div>
             
             <nav class="sidebar-nav">
-                <a href="{{ route('admin.dashboard') }}" class="nav-item active">
+                <a href="{{ route('admin.dashboard') }}" class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                     </svg>
                     <span>Dashboard</span>
                 </a>
-                
-                <a href="{{ route('admin.tours.index') }}" class="nav-item">
+
+                <a href="{{ route('admin.tours.index') }}" class="nav-item {{ request()->routeIs('admin.tours.*') ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                     <span>Manajemen Wisata</span>
                 </a>
-                
-                {{-- <a href="{{ route('admin.bookings.index') }}" class="nav-item">
+
+                <a href="{{ route('admin.users.index') }}" class="nav-item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                     </svg>
-                    <span>Manajemen Booking</span>
-                </a> --}}
+                    <span>Manajemen User</span>
+                </a>
+
+                <a href="{{ route('admin.reports.index') }}" class="nav-item {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>Laporan</span>
+                </a>
             </nav>
         </aside>
 
@@ -920,6 +927,7 @@
                                 <tr>
                                     <th>User</th>
                                     <th>Paket Wisata</th>
+                                    <th>Hotel</th>
                                     <th class="text-center">Tanggal Booking</th>
                                     <th class="text-center">Bukti Transfer</th>
                                     <th class="text-center">Aksi</th>
@@ -928,13 +936,18 @@
                             <tbody>
                                 @forelse($pendingConfirmations as $booking)
                                 <tr class="table-row">
-                                    <td>{{ $booking->user->name }}</td>
-                                    <td>{{ $booking->tour->name }}</td>
+                                    <td>{{ $booking->user ? $booking->user->name : 'User tidak ditemukan' }}</td>
+                                    <td>{{ $booking->tour ? $booking->tour->name : 'Tour tidak ditemukan' }}</td>
+                                    <td>{{ $booking->with_hotel && $booking->hotel ? $booking->hotel->name : ($booking->with_hotel ? 'N/A' : 'Tidak') }}</td>
                                     <td class="text-center">{{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}</td>
                                     <td class="text-center">
+                                        @if($booking->proof_of_payment && file_exists(storage_path('app/public/' . $booking->proof_of_payment)))
                                         <a href="{{ asset('storage/' . $booking->proof_of_payment) }}" target="_blank" class="btn btn-primary btn-sm">
                                             Lihat Bukti
                                         </a>
+                                        @else
+                                        <span class="text-danger">Bukti tidak tersedia</span>
+                                        @endif
                                     </td>
                                     <td class="text-center">
                                         <form action="{{ route('admin.bookings.approve', $booking) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin mengkonfirmasi pembayaran ini?');">
@@ -945,7 +958,7 @@
                                 </tr>
                                 @empty
                                 <tr class="table-row">
-                                    <td colspan="5" class="text-center">
+                                    <td colspan="6" class="text-center">
                                         <div class="empty-state">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -975,6 +988,7 @@
                                 <tr>
                                     <th>User</th>
                                     <th>Paket Wisata</th>
+                                    <th>Hotel</th>
                                     <th>Tanggal</th>
                                     <th>Jumlah</th>
                                     <th>Total Harga</th>
@@ -984,8 +998,9 @@
                             <tbody>
                                 @forelse($allBookings as $booking)
                                 <tr class="table-row">
-                                    <td>{{ $booking->user->name }}</td>
-                                    <td>{{ $booking->tour->name }}</td>
+                                    <td>{{ $booking->user ? $booking->user->name : 'User tidak ditemukan' }}</td>
+                                    <td>{{ $booking->tour ? $booking->tour->name : 'Tour tidak ditemukan' }}</td>
+                                    <td>{{ $booking->with_hotel && $booking->hotel ? $booking->hotel->name : ($booking->with_hotel ? 'N/A' : 'Tidak memilih hotel') }}</td>
                                     <td>{{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}</td>
                                     <td>{{ $booking->quantity }} orang</td>
                                     <td>Rp {{ number_format($booking->total_price, 0, ',', '.') }}</td>
@@ -1003,7 +1018,7 @@
                                 </tr>
                                 @empty
                                 <tr class="table-row">
-                                    <td colspan="6" class="text-center">
+                                    <td colspan="7" class="text-center">
                                         <div class="empty-state">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />

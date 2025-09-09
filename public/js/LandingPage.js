@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('chat-widget-container')) {
         initializeChatWidget();
     }
+
+
 });
 
 /**
@@ -26,25 +28,25 @@ function initializeHeroSlider() {
     const heroSection = document.getElementById('hero-section');
 
     const imageData = [{
-        mainImage: 'assets/img-2.jpg',
-        title: 'Nagano Prefecture',
-        subtitle: 'Japan Alps',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor, nobis officia. Aliquid officia quisquam, atque quidem ipsum magni architecto a?'
+        mainImage: 'https://upload.wikimedia.org/wikipedia/commons/7/7d/Mount_Bromo_at_sunrise%2C_showing_its_volcanoes_and_Mount_Semeru_%28background%29.jpg',
+        title: 'Gunung Bromo',
+        subtitle: 'Keindahan Alam',
+        description: 'Nikmati pemandangan matahari terbit yang menakjubkan di Gunung Bromo, salah satu gunung berapi paling ikonik di Indonesia.'
     }, {
-        mainImage: 'assets/img-3.jpg',
-        title: 'Ancient Temples',
-        subtitle: 'Cultural Heritage',
-        description: 'Discover the spiritual beauty of Japan\'s ancient temples and shrines, steeped in history and tradition.'
+        mainImage: 'https://www.papuaexplorers.com/wp-content/uploads/2016/07/wayag2_home2.jpg',
+        title: 'Raja Ampat',
+        subtitle: 'Surga Bawah Laut',
+        description: 'Jelajahi keindahan bawah laut Raja Ampat dengan terumbu karang yang kaya dan keanekaragaman hayati yang luar biasa.'
     }, {
-        mainImage: 'assets/img-4.jpg',
-        title: 'Modern Cities',
-        subtitle: 'Urban Exploration',
-        description: 'Experience the vibrant energy of Japan\'s modern cities, where tradition meets cutting-edge technology.'
+        mainImage: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Lake_Toba_and_the_surrounding_hills.jpg/1200px-Lake_Toba_and_the_surrounding_hills.jpg',
+        title: 'Danau Toba',
+        subtitle: 'Danau Vulkanik Terbesar',
+        description: 'Rasakan ketenangan Danau Toba, danau vulkanik terbesar di dunia yang dikelilingi oleh pemandangan pegunungan yang indah.'
     }, {
-        mainImage: 'assets/img-1.jpg',
-        title: 'Culinary Journey',
-        subtitle: 'Gastronomic Adventure',
-        description: 'Savor the exquisite flavors of Japanese cuisine, from sushi to ramen and everything in between.'
+        mainImage: 'https://mimbar.co.id/wp-content/uploads/2018/02/ngarai-sianok.jpg',
+        title: 'Ngarai Sianok',
+        subtitle: 'Keajaiban Alam Sumatera',
+        description: 'Nikmati keindahan ngarai yang memukau di Sumatera Barat, tempat yang sempurna untuk petualangan dan fotografi.'
     }];
     
     let currentIndex = 0;
@@ -71,12 +73,36 @@ function initializeHeroSlider() {
             tempImg.onload = async () => {
                 heroBgSecondary.src = newImageSrc;
                 heroBgSecondary.style.zIndex = '-1';
-                await smoothTransition(heroBgSecondary, { opacity: '1' }, 800);
-                
-                heroBg.src = newImageSrc;
+
+                // New animation: slide in from right with fade in
+                heroBgSecondary.style.transition = 'none';
                 heroBgSecondary.style.opacity = '0';
-                heroBgSecondary.style.zIndex = '-2';
-                resolve();
+                heroBgSecondary.style.transform = 'translateX(100%)';
+                requestAnimationFrame(() => {
+                    heroBgSecondary.style.transition = 'transform 800ms ease, opacity 800ms ease';
+                    heroBgSecondary.style.opacity = '1';
+                    heroBgSecondary.style.transform = 'translateX(0)';
+                });
+
+                // Wait for animation to complete
+                await new Promise(res => setTimeout(res, 800));
+
+                heroBg.src = newImageSrc;
+
+                // Slide out old image to left with fade out
+                heroBg.style.transition = 'transform 800ms ease, opacity 800ms ease';
+                heroBg.style.opacity = '0';
+                heroBg.style.transform = 'translateX(-100%)';
+
+                // Reset secondary image styles after transition
+                setTimeout(() => {
+                    heroBgSecondary.style.opacity = '0';
+                    heroBgSecondary.style.zIndex = '-2';
+                    heroBg.style.transition = '';
+                    heroBg.style.opacity = '1';
+                    heroBg.style.transform = '';
+                    resolve();
+                }, 800);
             };
             tempImg.onerror = () => {
                 console.warn('Image failed to load:', newImageSrc);
@@ -116,24 +142,35 @@ function initializeHeroSlider() {
         miniImages.forEach((img, i) => {
             const isActive = (i === activeIndex);
             img.classList.toggle('active', isActive);
+
+            // Use different transition durations for smoother effect
+            const transitionDuration = isActive ? 600 : 400;
+
             smoothTransition(img, {
-                transform: isActive ? 'scale(1.1)' : 'scale(1)',
-                opacity: isActive ? '1' : '0.7',
-                filter: isActive ? 'brightness(1) saturate(1.2)' : 'brightness(0.8) saturate(0.8)'
-            }, 400);
+                transform: isActive ? 'scale(1.15)' : 'scale(1)',
+                opacity: isActive ? '1' : '0.6',
+                filter: isActive ? 'brightness(1.1) saturate(1.3)' : 'brightness(0.9) saturate(0.9)'
+            }, transitionDuration);
         });
     }
 
     async function updateHeroSection(index) {
         if (isTransitioning) return;
         isTransitioning = true;
-        
+
         try {
+            // Start mini image animation first for immediate visual feedback
             updateMiniImageStates(index);
+
+            // Add a small delay before starting other animations for smoother transition
+            await new Promise(resolve => setTimeout(resolve, 100));
+
+            // Run background and text animations in parallel
             await Promise.all([
                 crossfadeImages(imageData[index].mainImage),
                 animateTextElements(index)
             ]);
+
             currentIndex = index;
         } catch (error) {
             console.warn('Animation error:', error);
@@ -544,12 +581,12 @@ class ParallaxController {
         const x = (clientX - innerWidth / 2) / (innerWidth / 2);
         const y = (clientY - innerHeight / 2) / (innerHeight / 2);
         
-        // Hero content parallax
-        if (this.heroContent) {
-            const moveX = x * 20;
-            const moveY = y * 10;
-            this.heroContent.style.transform = `translateY(-50%) translate(${moveX}px, ${moveY}px)`;
-        }
+        // // Hero content parallax
+        // if (this.heroContent) {
+        //     const moveX = x * 20;
+        //     const moveY = y * 10;
+        //     this.heroContent.style.transform = `translateY(-50%) translate(${moveX}px, ${moveY}px)`;
+        // }
         
         // Mini images tilt effect with performance optimization
         if (this.miniImages.length > 0) {
@@ -794,6 +831,8 @@ const parallaxStyles = `
     }
 }
 `;
+
+
 
 // Inject styles into the document
 if (!document.querySelector('style[data-parallax-styles]')) {

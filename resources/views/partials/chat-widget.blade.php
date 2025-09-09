@@ -37,6 +37,10 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Ensure the chat widget exists before running the script
+    const chatContainer = document.getElementById('chat-widget-container');
+    if (!chatContainer) return;
+
     const chatBubble = document.getElementById('chat-bubble');
     const chatBox = document.getElementById('chat-box');
     const closeChatBtn = document.getElementById('close-chat');
@@ -44,9 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const sendButton = document.getElementById('send-button');
     const chatMessages = document.getElementById('chat-messages');
     const chatForm = document.getElementById('chat-form');
-    const chatContainer = document.getElementById('chat-widget-container');
-    const userName = chatContainer ? chatContainer.getAttribute('data-user-name') : 'User';
-
+    
     let historyLoaded = false;
 
     // Toggle chat box visibility
@@ -79,31 +81,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (!message) return;
 
-        // Disable input while sending
         chatInput.disabled = true;
         sendButton.disabled = true;
 
         try {
-            // Send message to server
             const response = await fetch('/chat/send', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
-                body: JSON.stringify({
-                    message: message,
-                    mode: 'live' // Always use live mode for admin chat
-                })
+                body: JSON.stringify({ message: message })
             });
 
             if (response.ok) {
-                // Add message to chat immediately
-                appendMessage(message, 'user');
+                // User's message is sent, clear the input field.
+                // The message will not be displayed until the admin replies.
                 chatInput.value = '';
-
-                // Load updated history to show any new messages
-                setTimeout(() => loadChatHistory(), 1000);
             } else {
                 throw new Error('Failed to send message');
             }
@@ -116,10 +110,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Load chat history
+    // Load chat history from a dedicated route
     async function loadChatHistory() {
         try {
-            const response = await fetch('/chat/history/user?mode=live');
+            const userId = {{ Auth::id() }};
+            const response = await fetch(`/chat/history/${userId}`);
+
+            // Tambahkan pengecekan respons server untuk debugging
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Gagal memuat riwayat chat. Status:', response.status, 'Respons Server:', errorText);
+                throw new Error(`Server merespons dengan status: ${response.status}`);
+            }
+            
             const data = await response.json();
 
             chatMessages.innerHTML = '';
@@ -128,16 +131,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 chatMessages.innerHTML = '<div class="message system">Belum ada pesan. Mulai percakapan sekarang!</div>';
             } else {
                 data.forEach(msg => {
-                    appendMessage(msg.message, msg.sender_type);
+                    appendMessage(msg.message, msg.sender);
                 });
             }
         } catch (error) {
-            console.error('Error loading chat history:', error);
-            chatMessages.innerHTML = '<div class="message system">Gagal memuat riwayat chat.</div>';
+            console.error('Terjadi kesalahan pada fungsi loadChatHistory:', error);
+            // Don't show error for empty history, just show welcome message
+            if (error.message.includes('404') || error.message.includes('No messages found')) {
+                chatMessages.innerHTML = '<div class="message system">Belum ada pesan. Mulai percakapan sekarang!</div>';
+            } else {
+                chatMessages.innerHTML = '<div class="message system">Gagal memuat riwayat chat. Silakan coba lagi nanti.</div>';
+            }
         }
     }
 
-    // Append message to chat
+    // Append a new message to the chat window
     function appendMessage(message, sender) {
         const msgDiv = document.createElement('div');
         msgDiv.classList.add('message');
@@ -155,14 +163,15 @@ document.addEventListener('DOMContentLoaded', function() {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    // Listen for new messages via Echo (if available)
-    if (typeof Echo !== 'undefined') {
+    // Listen for new messages via Echo
+    if (typeof Echo !== 'undefined' && {{ Auth::id() }}) {
         Echo.private('livechat.' + {{ Auth::id() }})
             .listen('.NewChatMessage', (e) => {
-                if (e.sender !== 'user') {
-                    appendMessage(e.message, e.sender);
-                }
+                // When a new message arrives, reload the entire chat history
+                // This ensures both the admin's reply and the user's original message are shown
+                loadChatHistory();
             });
     }
 });
 </script>
+

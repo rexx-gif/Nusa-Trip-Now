@@ -12,11 +12,14 @@ class Booking extends Model
     protected $fillable = [
         'user_id',
         'tour_id',
+        'hotel_id',
+        'with_hotel',
         'booking_date',
         'total_price',
         'status',
         'payment_token',
         'payment_url',
+        'proof_of_payment',
     ];
 
     // Relasi: Satu booking dimiliki oleh satu user
@@ -29,6 +32,12 @@ class Booking extends Model
     public function tour()
     {
         return $this->belongsTo(Tour::class);
+    }
+
+    // Relasi: Satu booking untuk satu hotel (opsional)
+    public function hotel()
+    {
+        return $this->belongsTo(Hotel::class);
     }
 
     // Relasi: Satu booking punya satu data pembayaran

@@ -1,27 +1,17 @@
-# AI Chat Integration - TODO List
+# Task: Update Admin Pages Layout and Styling Consistency
 
-## ✅ COMPLETED
-- [x] Database migration for sender_type field
-- [x] ChatMessage model updated with sender_type
-- [x] AiChatService with OpenAI integration
-- [x] ChatController with AI mode handling
-- [x] Frontend chat widget with mode selection
-- [x] JavaScript for AI message handling
-- [x] Real-time broadcasting for AI responses
-- [x] Routes configuration
+## Completed
+- Updated resources/views/admin/tours/index.blade.php to use admin-dashboard layout and consistent styling.
+- Verified resources/views/admin/tours/edit.blade.php uses admin-dashboard layout and consistent styling.
+- Updated resources/views/admin/users/index.blade.php to use admin-dashboard layout and consistent styling, including header, stats cards, search/filter, and user table.
 
-## 🔧 PENDING
-- [x] Run database migration
-- [x] Add OpenAI API key to .env file
-- [x] Fix AiChatService configuration
-- [ ] Test AI chat functionality
-- [ ] Update admin chat view to show AI messages
-- [ ] Add CSS styling for AI messages
+## Next Steps
+- Review and update resources/views/admin/tours/create.blade.php to ensure consistent layout and styling with other admin pages.
+- Verify other admin pages (e.g., reports, dashboard) for layout consistency and update if needed.
+- Test all updated pages in browser to confirm layout and styling consistency.
+- Fix any UI issues or inconsistencies found during testing.
 
-## 📋 TESTING STEPS
-1. Run migration: `php artisan migrate` ✅ DONE
-2. Add OPENAI_API_KEY to .env ✅ DONE
-3. Test chat widget on landing page
-4. Verify AI responses work
-5. Test mode switching between AI and Live Agent
-6. Check admin chat dashboard shows AI messages
+## Notes
+- All admin pages should use the admin-dashboard layout.
+- Use Tailwind CSS utility classes consistently for styling.
+- Ensure navigation sidebar and header are consistent across admin pages.

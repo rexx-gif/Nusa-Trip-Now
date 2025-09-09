@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\TourController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\User\ProfileController as UserProfileController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PaymentCallbackController;
@@ -29,10 +31,13 @@ require __DIR__.'/auth.php';
 
 // --- ROUTE UNTUK MENAMPILKAN WISATA KE USER (PUBLIC) ---
 Route::get('/tours', [TourPageController::class, 'index'])->name('tours.index');
-Route::get('/tours/{tour}', [TourPageController::class, 'show'])->name('tours.show');
+Route::get('/tours/{tour}', function(\App\Models\Tour $tour) {
+    $tour->load(['province', 'categories', 'inclusions']);
+    return view('tours.show_improved', compact('tour'));
+})->name('tours.show');
 
 // --- ROUTE UNTUK USER YANG SUDAH LOGIN ---
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'prevent.back'])->group(function () {
     
    // routes/web.php
 
@@ -61,17 +66,20 @@ Route::get('/dashboard', function () {
     // === ROUTE CHAT UNTUK USER ===
     // User mengirim pesan
     Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
-    // User & Admin mengambil riwayat chat
+    // User & Admin mengambil riwayat chat berdasarkan ID User
     Route::get('/chat/history/{userId}', [ChatController::class, 'getChatHistory'])->name('chat.history');
 });
 
 // --- ROUTE UNTUK ADMIN ---
 Route::prefix('admin')->name('admin.')->middleware(['auth', AdminMiddleware::class])->group(function () {
-    
+
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::resource('tours', TourController::class);
+    Route::resource('users', UserController::class);
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/export', [ReportController::class, 'export'])->name('reports.export');
     Route::post('/bookings/{booking}/approve', [AdminDashboardController::class, 'approvePayment'])->name('bookings.approve');
-    
+
     // === ROUTE CHAT UNTUK ADMIN ===
     // Admin mengirim balasan
     Route::post('/chat/send', [ChatController::class, 'adminSendMessage'])->name('chat.send');
@@ -79,3 +87,4 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', AdminMiddleware::cla
 
 // --- ROUTE UNTUK PAYMENT GATEWAY CALLBACK ---
 Route::post('/payments/callback', [PaymentCallbackController::class, 'handle'])->name('payment.callback');
+

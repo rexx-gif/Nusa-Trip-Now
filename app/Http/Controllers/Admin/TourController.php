@@ -12,14 +12,19 @@ class TourController extends Controller
     // Menampilkan semua data wisata
     public function index()
     {
-        $tours = Tour::latest()->paginate(10);
+        $tours = Tour::with(['province', 'categories', 'inclusions', 'hotels'])->latest()->paginate(10);
         return view('admin.tours.index', compact('tours'));
     }
 
     // Menampilkan form tambah wisata
     public function create()
     {
-        return view('admin.tours.create');
+        $tours = Tour::with(['province', 'categories', 'inclusions', 'hotels'])->latest()->paginate(10);
+        $provinces = \App\Models\Province::all();
+        $categories = \App\Models\Category::all();
+        $inclusions = \App\Models\Inclusion::all();
+        $hotels = \App\Models\Hotel::all();
+        return view('admin.tours.create', compact('tours', 'provinces', 'categories', 'inclusions', 'hotels'));
     }
 
     // Menyimpan data wisata baru
@@ -30,6 +35,13 @@ class TourController extends Controller
             'description' => 'required|string',
             'location' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
+            'province_id' => 'required|exists:provinces,id',
+            'categories' => 'array',
+            'categories.*' => 'exists:categories,id',
+            'inclusions' => 'array',
+            'inclusions.*' => 'exists:inclusions,id',
+            'hotels' => 'array',
+            'hotels.*' => 'exists:hotels,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -38,13 +50,26 @@ class TourController extends Controller
             $imagePath = $request->file('image')->store('tours', 'public');
         }
 
-        Tour::create([
+        $tour = Tour::create([
             'name' => $request->name,
             'description' => $request->description,
             'location' => $request->location,
             'price' => $request->price,
+            'province_id' => $request->province_id,
             'image' => $imagePath,
         ]);
+
+        if ($request->has('categories')) {
+            $tour->categories()->attach($request->categories);
+        }
+
+        if ($request->has('inclusions')) {
+            $tour->inclusions()->attach($request->inclusions);
+        }
+
+        if ($request->has('hotels')) {
+            $tour->hotels()->attach($request->hotels);
+        }
 
         return redirect()->route('admin.tours.index')->with('success', 'Paket wisata berhasil ditambahkan.');
     }
@@ -52,7 +77,12 @@ class TourController extends Controller
     // Menampilkan form edit wisata
     public function edit(Tour $tour)
     {
-        return view('admin.tours.edit', compact('tour'));
+        $tours = Tour::with(['province', 'categories', 'inclusions', 'hotels'])->latest()->paginate(10);
+        $provinces = \App\Models\Province::all();
+        $categories = \App\Models\Category::all();
+        $inclusions = \App\Models\Inclusion::all();
+        $hotels = \App\Models\Hotel::all();
+        return view('admin.tours.edit', compact('tour', 'tours', 'provinces', 'categories', 'inclusions', 'hotels'));
     }
 
     // Memperbarui data wisata
@@ -63,6 +93,13 @@ class TourController extends Controller
             'description' => 'required|string',
             'location' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
+            'province_id' => 'required|exists:provinces,id',
+            'categories' => 'array',
+            'categories.*' => 'exists:categories,id',
+            'inclusions' => 'array',
+            'inclusions.*' => 'exists:inclusions,id',
+            'hotels' => 'array',
+            'hotels.*' => 'exists:hotels,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -80,8 +117,13 @@ class TourController extends Controller
             'description' => $request->description,
             'location' => $request->location,
             'price' => $request->price,
+            'province_id' => $request->province_id,
             'image' => $imagePath,
         ]);
+
+        $tour->categories()->sync($request->categories ?? []);
+        $tour->inclusions()->sync($request->inclusions ?? []);
+        $tour->hotels()->sync($request->hotels ?? []);
 
         return redirect()->route('admin.tours.index')->with('success', 'Paket wisata berhasil diperbarui.');
     }

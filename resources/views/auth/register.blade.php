@@ -37,27 +37,10 @@
                     @csrf {{-- Token keamanan wajib di Laravel --}}
 
                     <div class="input-group">
-                        <label for="username">Username</label>
+                        <label for="name">Name</label>
                         <div class="input-field">
-                            <input type="text" id="username" name="username" value="{{ old('username') }}" required>
+                            <input type="text" id="name" name="name" value="{{ old('name') }}" required>
                             <i class="fas fa-user"></i>
-                        </div>
-                    </div>
-
-                    <div class="name-group">
-                        <div class="input-group">
-                            <label for="first-name">First Name</label>
-                            <div class="input-field">
-                                <input type="text" id="first-name" name="first_name" value="{{ old('first_name') }}" required>
-                                <i class="fas fa-user"></i> 
-                            </div>
-                        </div>
-                        <div class="input-group">
-                            <label for="last-name">Last Name</label>
-                            <div class="input-field">
-                                <input type="text" id="last-name" name="last_name" value="{{ old('last_name') }}" required>
-                                <i class="fas fa-user"></i>
-                            </div>
                         </div>
                     </div>
 
@@ -73,6 +56,14 @@
                         <label for="password">Password</label>
                         <div class="input-field">
                             <input type="password" id="password" name="password" required>
+                            <i class="fas fa-eye"></i>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password_confirmation">Confirm Password</label>
+                        <div class="input-field">
+                            <input type="password" id="password_confirmation" name="password_confirmation" required>
                             <i class="fas fa-eye"></i>
                         </div>
                     </div>
